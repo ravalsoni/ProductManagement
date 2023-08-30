@@ -1,0 +1,116 @@
+﻿@model ProductManagement.Web.Models.Tasks.IndexViewModel
+@using ProductManagement.Web.Startup
+@{
+    ViewBag.Title = L("TaskList");
+    // ViewBag.ActiveMenu = ; //Matches with the menu name in SimpleTaskAppNavigationProvider to highlight the menu item
+}
+
+@section scripts
+    {
+    <environment names="Development">
+        <script src="~/view-resources/Views/Tasks/index.js" asp-append-version="true"></script>
+    </environment>
+
+    @*<environment names="Staging,Production">
+        <script src="~/js/views/tasks/index.min.js" asp-append-version="true"></script>
+    </environment>*@
+}
+
+
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-6">
+                <h2> TaskList</h2>
+
+            </div>
+
+        </div>        <div class="row">
+            <div class="col-sm-2">
+                <span class="pull-right">
+                    @Html.DropDownListFor(
+                    model => model.SelectedTaskState,
+                    Model.GetTasksStateSelectListItems(LocalizationManager),
+                    new
+                    {
+                    @class = "form-control",
+                    id = "TaskStateCombobox"
+                    })
+                </span>
+
+            </div>
+
+            <div class="col-sm-4">
+                <h2>
+                   
+                    <a class="btn btn-primary btn-sm" asp-controller="Tasks" asp-action="Create">AddNew</a>
+                    </h2>
+
+            </div>
+             </div>
+    </div>
+</section>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <!--Use for bulk actions-->
+                            </div>
+                            <div class="col-md-6">
+                                @*   @await Html.PartialAsync("~/Views/Users/Index.AdvancedSearch.cshtml")
+                                *@
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class=" table table-bordered table-striped" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th> Task</th>
+                                        <th>State</th>
+                                        <th></th>
+
+
+                                    </tr>
+
+                                </thead>
+                                <tbody>
+                                    @foreach (var task in Model.Tasks)
+                                    {
+
+                                        <tr>
+                                            <td>
+                                                @task.Title
+                                            </td>
+                                            <td>
+                                                <span class="pull-right label label-lg @Model.GetTaskLabel(task)">@L($"TaskState_{task.State}")</span>
+
+                                            </td>
+                                            <td>
+                                                <div class="w-75 btn-group" role="group">
+                                                    <a  asp-action="Edit" asp-route-id="@task.Id" class="btn btn-primary mx-2">Edit
+                                                        <i class="bi bi-pencil"></i>
+                                                    </a>
+                                                    <a  asp-action="Delete" asp-route-id="@task.Id" class="btn btn-primary mx-2">Delete
+                                                        <i class="bi bi-trash3-fill"></i>
+                                                    </a>
+                                                   </div>
+                                            </td>
+                                        </tr>
+
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
